@@ -1,3 +1,6 @@
+# Other dirs
+test_images/
+
 # Byte-compiled / optimized / DLL files
 */__pycache__/*
 workspace
@@ -10,6 +13,10 @@ workspace
 # C extensions
 *.so
 *.nfs*
+
+# Datasets & Models
+datasets/
+models/
 
 # Distribution / packaging
 .Python

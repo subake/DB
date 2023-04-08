@@ -1,3 +1,5 @@
+# CUDA_VISIBLE_DEVICES=0 python eval.py experiments/seg_detector/sroie_resnet50_deform_thre.yaml --resume models/ic15_resnet50 --box_thresh 0.7
+
 #!python3
 import argparse
 import os
@@ -19,6 +21,9 @@ from training.model_saver import ModelSaver
 from training.optimizer_scheduler import OptimizerScheduler
 from concern.config import Configurable, Config
 import time
+
+import cv2
+
 
 def main():
     parser = argparse.ArgumentParser(description='Text Recognition Training')
@@ -183,8 +188,20 @@ class Eval:
 
                     if visualize and self.structure.visualizer:
                         vis_image = self.structure.visualizer.visualize(batch, output, pred)
-                        self.logger.save_image_dict(vis_image)
-                        vis_images.update(vis_image)
+                        # self.logger.save_image_dict(vis_image)
+                        # vis_images.update(vis_image)
+                        
+
+                        for index, key in enumerate(vis_image.keys()):
+                            filename = batch['filename'][index]
+                            result_file_name = 'res_' + filename.split('/')[-1].split('.')[0] + '.jpg'
+                            result_file_path = os.path.join(self.args['result_dir'], result_file_name)
+                            # print(result_file_path)
+                            # print(vis_image)
+                            # print(batch['image'])
+                            cv2.imwrite(result_file_path, vis_image[key])
+
+
                 metrics = self.structure.measurer.gather_measure(raw_metrics, self.logger)
                 for key, metric in metrics.items():
                     self.logger.info('%s : %f (%d)' % (key, metric.avg, metric.count))

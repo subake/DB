@@ -1,3 +1,5 @@
+# CUDA_VISIBLE_DEVICES=0 python demo.py experiments/seg_detector/sroie_resnet50_deform_thre.yaml --image_path /home/datasets/SROIEv2/test/images/X00016469670.jpg --resume models/ic15_resnet50 --box_thresh 0.7 --visualize
+
 #!python3
 import argparse
 import os
@@ -88,6 +90,7 @@ class Demo:
         return resized_img
         
     def load_image(self, image_path):
+        # print(image_path)
         img = cv2.imread(image_path, cv2.IMREAD_COLOR).astype('float32')
         original_shape = img.shape[:2]
         img = self.resize_image(img)
